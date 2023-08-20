@@ -1,4 +1,3 @@
-# app/__init__.py
 from flask import Flask
 from flask_jwt_extended import JWTManager
 from flask_sqlalchemy import SQLAlchemy

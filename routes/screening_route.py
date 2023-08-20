@@ -18,3 +18,28 @@ def get_my_result():
 @jwt_required()
 def get_my_histories():
     return screening_controller.get_my_histories()
+
+@screening_bp.route("/evaluate-model", methods=["GET"])
+@jwt_required()
+def evaluate_model():
+    return screening_controller.evaluate_model()
+
+@screening_bp.route("/list-files", methods=["GET"])
+@jwt_required()
+def list_files():
+    return screening_controller.list_files()
+
+@screening_bp.route("/upload-dataset", methods=["POST"])
+@jwt_required()
+def upload_file():
+    return screening_controller.upload_file()
+
+@screening_bp.route("/delete-file/<filename>", methods=["DELETE"])
+@jwt_required()
+def delete_file(filename):
+    return screening_controller.delete_file(filename)
+
+@screening_bp.route("/download-dataset", methods=["GET"])
+@jwt_required()
+def download_dataset():
+    return screening_controller.download_dataset()

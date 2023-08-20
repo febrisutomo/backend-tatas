@@ -10,3 +10,4 @@ class Config:
     JWT_REFRESH_TOKEN_EXPIRES = timedelta(days=int(os.getenv('JWT_REFRESH_TOKEN_EXPIRES')))
     SQLALCHEMY_DATABASE_URI = os.getenv("SQLALCHEMY_DATABASE_URI")
     JWT_ERROR_MESSAGE_KEY = 'message'
+    UPLOAD_FOLDER = 'engine/data/'

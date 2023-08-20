@@ -1,10 +1,12 @@
-from flask import jsonify, request
+from flask import jsonify, request, send_file
 from models import User, Screening
 from flask_jwt_extended import get_jwt_identity
 from schemas.screening_schema import ScreeningSchema
 from marshmallow import ValidationError
-from app import db
+from app import db, app
 from engine import nb_engine
+from werkzeug.utils import secure_filename
+import os
 
 
 def get_histories(user_id):
@@ -66,9 +68,9 @@ def add(user_id):
       return jsonify({"error": err.messages}), 400
       
     val = [data["hb"], data["mcv"], data["mch"]]
-    result = nb_engine.cekkemungkinan(val)
-    probability = round(result["probabilitas"], 2)
-    prediction = True if result["prediksi"] == "Positif" else False
+    result = nb_engine.check_probability(val)
+    probability = round(result["probability"], 2)
+    prediction = result["prediction"]
     
 
     screening = Screening(**validated, probability = probability, prediction=prediction)
@@ -87,3 +89,55 @@ def add_for_myself():
   email = get_jwt_identity()
   user = User.query.filter_by(email=email).first()
   return add(user.id)
+
+def evaluate_model():
+  
+  result = nb_engine.evaluate_model()
+
+  return jsonify({"result": result})
+
+def upload_file():
+    print(request.files['file'])
+    if 'file' not in request.files:
+        return jsonify({'message': 'No file part in the request'}), 400
+
+    file = request.files['file']
+
+    if file.filename == '':
+        return jsonify({'message': 'No selected file'}), 400
+
+    if file:
+        filename = secure_filename(file.filename)
+        file.save(os.path.join(app.config['UPLOAD_FOLDER'], 'thalassemia_3v_raw.xlsx'))
+        return jsonify({'message': 'File successfully uploaded'}), 200
+    else:
+        return jsonify({'message': 'File upload failed'}), 500
+      
+def delete_file(filename):
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], filename)
+
+    if not os.path.exists(file_path):
+        return jsonify({'message': 'File not found'}), 404
+
+    try:
+        os.remove(file_path)
+        return jsonify({'message': 'File deleted successfully'}), 200
+    except Exception as e:
+        return jsonify({'message': f'Failed to delete file: {str(e)}'}), 500
+      
+def list_files():
+    file_list = []
+    for filename in os.listdir(app.config['UPLOAD_FOLDER']):
+        file_list.append(filename)
+    return jsonify({"files": file_list}), 200
+  
+def download_dataset():
+    file_path = os.path.join(app.config['UPLOAD_FOLDER'], 'thalassemia_3v_raw.xlsx')
+
+    if not os.path.exists(file_path):
+        return jsonify({'message': 'File not found'}), 404
+
+    try:
+        return send_file(file_path, as_attachment=True)
+    except Exception as e:
+        return jsonify({'message': f'Failed to download file: {str(e)}'}), 500

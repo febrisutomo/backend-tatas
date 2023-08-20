@@ -20,7 +20,7 @@ val=[11.60,84.00,30.00] #negatif
 # val=[12.70,79.20,25.50] #positif
 val2 = normalisasi(val)
 print(val)
-print("nb", nb_engine.cekkemungkinan(val))
+print("nb", nb_engine.check_probability(val))
 # print("c45", c45_engine.cekkemungkinan(val2))
-# nb_engine.testtrain()
-# c45_engine.testtrain()
+nb_engine.evaluate_model()
+# c45_engine.test_train()
