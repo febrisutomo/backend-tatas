@@ -9,7 +9,7 @@ def role_required(*roles):
         @wraps(fn)
         def wrapper(*args, **kwargs):
             current_user = get_jwt_identity()
-            user = UserSchema().dump(User.query.filter_by(email=current_user).first())
+            user = UserSchema().dump(User.query.filter_by(username=current_user).first())
 
             if user['role']['name'] not in roles:
                 return jsonify({'message': 'Unauthorized'}), 403

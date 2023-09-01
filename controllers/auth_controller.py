@@ -15,14 +15,14 @@ from schemas.user_schema import (
 from app import db, bcrypt
 from utils.parse_nik import parse_nik
     
-def check_email():
+def check_username():
     data = request.get_json()
     print(str(data))
 
-    if User.query.filter_by(email=data["email"]).first():
-        return jsonify({"message": "Email sudah digunakan"}), 409
+    if User.query.filter_by(username=data["username"]).first():
+        return jsonify({"message": "Username sudah digunakan"}), 409
 
-    return jsonify({"message": "Email tersedia"})
+    return jsonify({"message": "Username tersedia"})
 
 def register():
     schema = RegisterSchema()
@@ -33,8 +33,8 @@ def register():
     except ValidationError as err:
         return jsonify({"error": err.messages}), 400
 
-    if User.query.filter_by(email=validated["email"]).first():
-        return jsonify({"message": "email sudah digunakan"}), 409
+    if User.query.filter_by(username=validated["username"]).first():
+        return jsonify({"message": "Username sudah digunakan"}), 409
 
     try:
         new_user = User(**validated)
@@ -63,13 +63,13 @@ def login():
     except ValidationError as err:
         return jsonify({"error": err.messages}), 400
 
-    user = User.query.filter_by(email=validated['email']).first()
+    user = User.query.filter_by(username=validated['username']).first()
 
     if not user or not bcrypt.check_password_hash(user.password, validated['password']):
-        return jsonify({"message": "Email atau password tidak valid"}), 401
+        return jsonify({"message": "Username atau password tidak valid"}), 401
 
-    access_token = create_access_token(identity=user.email)
-    refresh_token = create_refresh_token(identity=user.email)
+    access_token = create_access_token(identity=user.username)
+    refresh_token = create_refresh_token(identity=user.username)
 
     return jsonify(
         {
@@ -88,8 +88,8 @@ def refresh_token():
 
 def get_profile():
     schema = UserSchema()
-    email = get_jwt_identity()
-    user = User.query.filter_by(email=email).first()
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
     if user is None:
         return jsonify({"success": False, "message": "User tidak ditemukan"}), 404
     
@@ -97,9 +97,9 @@ def get_profile():
     
 def update_profile():
     schema = UpdateProfile()
-    email = get_jwt_identity()
+    username = get_jwt_identity()
     
-    user = User.query.filter_by(email=email).first()
+    user = User.query.filter_by(username=username).first()
     if user is None:
         return jsonify({"success": False, "message": "User tidak ditemukan"}), 404
     
@@ -122,8 +122,8 @@ def update_profile():
     
 def change_password():
     data = request.get_json()
-    email = get_jwt_identity()
-    user = User.query.filter_by(email=email).first()
+    username = get_jwt_identity()
+    user = User.query.filter_by(username=username).first()
     
     
     if not bcrypt.check_password_hash(user.password, data['current_password']):

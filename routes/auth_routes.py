@@ -8,9 +8,9 @@ from controllers import auth_controller
 auth_bp = Blueprint("auth", __name__)
 
 
-@auth_bp.route("/check-email", methods=["POST"])
-def check_email():
-    return auth_controller.check_email()
+@auth_bp.route("/check-username", methods=["POST"])
+def check_username():
+    return auth_controller.check_username()
 
 
 @auth_bp.route("/register", methods=["POST"])

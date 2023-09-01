@@ -4,6 +4,16 @@ from flask_jwt_extended import jwt_required
 from middleware.auth_middleware import role_required
 screening_bp = Blueprint('screening', __name__)
 
+@screening_bp.route('/all', methods=['GET'])
+@jwt_required()
+def get_all():
+    return screening_controller.get_all()
+
+@screening_bp.route('/<screening_id>', methods=['PATCH'])
+@jwt_required()
+def update_dna(screening_id):
+    return screening_controller.update_dna(screening_id)
+
 @screening_bp.route('/me', methods=['POST'])
 @jwt_required()
 def add_for_myself():

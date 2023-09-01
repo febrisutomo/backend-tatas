@@ -28,8 +28,8 @@ def seed_data():
     db.session.commit()
 
     # Tambahkan data pengguna
-    admin_user = User(name="Admin Febri", email='admin@gmail.com', password=bcrypt.generate_password_hash("admin123").decode('utf-8'), role_id=admin_role.id, gender_id=male_gender.id, blood_type_id=blood_a.id)
-    user_user = User(name="User Febri", email='user@gmail.com', password=bcrypt.generate_password_hash("user123").decode('utf-8'), role_id=user_role.id, gender_id=female_gender.id, blood_type_id=blood_b.id)
+    admin_user = User(name="Admin Febri", username='admin', password=bcrypt.generate_password_hash("admin123").decode('utf-8'), role_id=admin_role.id, gender_id=male_gender.id, blood_type_id=blood_a.id)
+    user_user = User(name="User Febri", username='user', password=bcrypt.generate_password_hash("user123").decode('utf-8'), role_id=user_role.id, gender_id=female_gender.id, blood_type_id=blood_b.id)
     db.session.add(admin_user)
     db.session.add(user_user)
     

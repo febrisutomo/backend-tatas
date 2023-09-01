@@ -28,7 +28,7 @@ class RegisterSchema(ma.SQLAlchemyAutoSchema):
     nik = fields.Str(validate=validate.Length(equal=16))
     
 class LoginSchema(Schema):
-    email = fields.Email(required=True)
+    username = fields.Str(required=True)
     password = fields.Str(required=True)
 
 
@@ -45,7 +45,7 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 class UpdateProfile(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
-        exclude = ['password', 'email']
+        exclude = ['password', 'username']
         include_fk = True
         
     

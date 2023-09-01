@@ -7,7 +7,7 @@ class User(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(50))
-    email = db.Column(db.String(50), nullable=False)
+    username = db.Column(db.String(50), nullable=False)
     password = db.Column(db.String(100), nullable=False)
     role_id = db.Column(db.Integer, db.ForeignKey('roles.id'), nullable=False, default=2)
     gender_id = db.Column(db.Integer, db.ForeignKey('genders.id'))
@@ -31,7 +31,7 @@ class User(db.Model):
 
     def __init__(
         self,
-        email,
+        username,
         password=None,
         role_id=2,
         nik=None,
@@ -45,7 +45,7 @@ class User(db.Model):
         longitude=None,
         phone_number=None,
     ):
-        self.email = email
+        self.username = username
         self.password = password
         self.role_id = role_id
         self.nik = nik
