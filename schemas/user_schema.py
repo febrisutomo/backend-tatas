@@ -5,28 +5,28 @@ from .region_schema import DistrictSchema
 
 
 class RoleSchema(ma.SQLAlchemyAutoSchema):
-   class Meta:
-       model = Role
+    class Meta:
+        model = Role
 
 
 class GenderSchema(ma.SQLAlchemyAutoSchema):
-   class Meta:
-       model = Gender
+    class Meta:
+        model = Gender
 
 
 class BloodTypeSchema(ma.SQLAlchemyAutoSchema):
-   class Meta:
-       model = BloodType
-
+    class Meta:
+        model = BloodType
 
 
 class RegisterSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         include_fk = True
-    
+
     nik = fields.Str(validate=validate.Length(equal=16))
-    
+
+
 class LoginSchema(Schema):
     username = fields.Str(required=True)
     password = fields.Str(required=True)
@@ -36,17 +36,15 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         exclude = ['password']
-    
+
     blood_type = fields.Nested(BloodTypeSchema)
     gender = fields.Nested(GenderSchema)
     role = fields.Nested(RoleSchema)
     district = fields.Nested(DistrictSchema)
-    
+
+
 class UpdateProfile(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = User
         exclude = ['password', 'username']
         include_fk = True
-        
-    
-

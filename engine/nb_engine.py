@@ -13,7 +13,7 @@ def save_model():
     y = data["DNA"]
     # Split dataset into training and testing set
     x_train, x_test, y_train, y_test = train_test_split(
-        x, y, test_size=0.3, random_state=42
+        x, y, test_size=0.3, random_state=4
     )
     # Initialize Naive Bayes classifier
     model = GaussianNB()
@@ -21,6 +21,7 @@ def save_model():
     model.fit(x_train, y_train)
     filename = "engine/model/nb_model.mod"
     pickle.dump(model, open(filename, "wb"))
+    print("Model saved successfully")
 
 
 def evaluate_model():
@@ -31,7 +32,7 @@ def evaluate_model():
     y = data["DNA"]
     # Split dataset into training and testing set
     x_train, x_test, y_train, y_test = train_test_split(
-        x, y, test_size=0.3, random_state=42
+        x, y, test_size=0.3, random_state=4
     )
     # Initialize Naive Bayes classifier
     model = GaussianNB()
@@ -50,6 +51,8 @@ def evaluate_model():
     print('accuracy', accuracy)
     print('precision', precision)
     print('recall', recall)
+    print("Number of training data:", len(x_train))
+    print("Number of testing data:", len(x_test))
     
     return {"accuracy": accuracy, "precision": precision, "recall": recall, "f1": f1}
 

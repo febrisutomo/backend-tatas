@@ -13,12 +13,12 @@ from engine import nb_engine, c45_engine
 # else:
 #     print("Format NIK tidak valid.")
     
-# nb_engine.savemodel()
+nb_engine.save_model()
 # c45_engine.savemodel()
-val=[11.60,84.00,30.00] #negatif
+# val=[11.60,84.00,30.00] #negatif
 # val=[16.30,88.30,30.20] #negatif
-# val=[12.70,79.20,25.50] #positif
-val2 = normalisasi(val)
+val=[12.70,79.20,25.50] #positif
+# val2 = normalisasi(val)
 print(val)
 print("nb", nb_engine.check_probability(val))
 # print("c45", c45_engine.cekkemungkinan(val2))

@@ -59,6 +59,7 @@ class User(db.Model):
         self.longitude = longitude
         self.phone_number = phone_number,
     
+    
 class Role(db.Model):
     __tablename__ = "roles"
     
