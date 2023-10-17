@@ -181,37 +181,41 @@ def get_histories_for_auth_user():
 @screening_bp.route("/c45screening", methods=["POST"])
 @jwt_required()
 def c45():
-    # Menerima data dari client
-    # req = request.get_json()
-    hb = request.json.get("hb")
-    mcv = request.json.get("mcv")
-    mch = request.json.get("mch")
-    nama_model = request.json.get("nama_model")
+    try:
+        # Menerima data dari client
+        # req = request.get_json()
+        hb = request.json.get("hb")
+        mcv = request.json.get("mcv")
+        mch = request.json.get("mch")
+        nama_model = request.json.get("nama_model")
 
-    # HB,MCV,MCH
-    val = [hb, mcv, mch]
-    # ubah , jadi .
-    val[0] = val[0].replace(',', '.')
-    val[1] = val[1].replace(',', '.')
-    val[2] = val[2].replace(',', '.')
-    # ubah jadi float
-    val[0] = float(val[0])
-    val[1] = float(val[1])
-    val[2] = float(val[2])
-    print(val)
-    # Melakukan pemrosesan data
-    result = c45_engine.cekkemungkinan(val, nama_model)
+        # HB,MCV,MCH
+        val = [hb, mcv, mch]
+        # ubah , jadi .
+        val[0] = val[0].replace(',', '.')
+        val[1] = val[1].replace(',', '.')
+        val[2] = val[2].replace(',', '.')
+        # ubah jadi float
+        val[0] = float(val[0])
+        val[1] = float(val[1])
+        val[2] = float(val[2])
+        print(val)
+        # Melakukan pemrosesan data
+        result = c45_engine.cekkemungkinan(val, nama_model)
 
-    return jsonify(
-        {
-            "success": True,
-            "hb": val[0],
-            "mcv": val[1],
-            "mch": val[2],
-            "prediction": result['prediksi'],
-            "probability": round(result["probabilitas"], 2),
-        }
-    )
+        return jsonify(
+            {
+                "success": True,
+                "hb": val[0],
+                "mcv": val[1],
+                "mch": val[2],
+                "prediction": result['prediksi'],
+                "probability": round(result["probabilitas"], 2),
+            }
+        )
+    except Exception as e:
+        print("Error:", e)
+        return jsonify({"success": False, "error": str(e)})
 
 @screening_bp.route("/make_c45_model", methods=["POST"])
 @jwt_required()
